@@ -1,0 +1,39 @@
+<!-- Manas chechani -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multilingual Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Multilingual Chatbot</h1>
+        <input type="text" id="userInput" placeholder="Type your message here...">
+        <button onclick="sendMessage()">Send</button>
+        <div id="chatbox"></div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            var userMessage = document.getElementById('userInput').value;
+            var chatbox = document.getElementById('chatbox');
+
+            fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: userMessage, lang: 'en' }),  // Defaulting to English
+            })
+            .then(response => response.json())
+            .then(data => {
+                var botReply = data.reply;
+                chatbox.innerHTML += `<p><b>You:</b> ${userMessage}</p>`;
+                chatbox.innerHTML += `<p><b>Bot:</b> ${botReply}</p>`;
+            });
+        }
+    </script>
+</body>
+</html>
